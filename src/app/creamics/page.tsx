@@ -25,7 +25,7 @@ export default async function CeramicsCollection() {
         {(res.cards).map((item: any, index: number) => (
           <div key={index} className="flex flex-col">
             <div className={`aspect-square mb-6 ${item.background || ""}`}>
-              <Link href="/productListing">
+              <Link href="/productCards">
               <Image
 
                 src={res.cards[index].cardCremImg}

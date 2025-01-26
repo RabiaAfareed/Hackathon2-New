@@ -5,7 +5,7 @@ import { client } from "@/sanity/lib/client";
  async function HeroSection() {
 
     const res = await client.fetch(
-     `*[_type == 'landingPage'][0].sections[0]{
+     `*[_type == 'hero'][0]{
       'heroImg': heroImg.asset->url,
       'heroHeading':heroHeading,
       'heroParagraph': heroParagraph,
