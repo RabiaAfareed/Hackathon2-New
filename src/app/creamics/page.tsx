@@ -17,7 +17,7 @@ export default async function CeramicsCollection() {
 
   return (
     <section className="max-w-[1440px] min-h-[761px] mx-auto px-4 md:px-8 py-16">
-      <h2 className="text-4xl md:text-5xl font-light mb-12 px-4">
+      <h2 className="text-4xl md:text-5xl font-light mb-12 px-4"> Our 
        {res.creamicsHeading}
       </h2>
 
@@ -39,7 +39,7 @@ export default async function CeramicsCollection() {
               </Link>
             </div>
             <h3 className="text-xl font-normal mb-2">
-            {res.cards[index].cardCremHeading}
+           {res.cards[index].cardCremHeading}
             </h3>
             <p className="text-lg text-gray-600">
               £{res.cards[index].cardCremPrice}

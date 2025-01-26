@@ -13,10 +13,10 @@ export default function Home() {
   return (
    <div className="lg:ml-[80px]">
      <Header/>
-    {/* <HeroSection/> */}
+    <HeroSection/>
     <BrandDifferent/>
     <Creamics/>
-    {/* <PopularProducts/> */}
+    <PopularProducts/>
     <Email/>
     <BrandStorySection/>
    </div>

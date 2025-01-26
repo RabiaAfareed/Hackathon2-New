@@ -5,7 +5,7 @@ import { client } from '@/sanity/lib/client';
 
 export default async function PopularProducts() {
   const res = await client.fetch(
-    `*[_type == 'landingPage'][0].sections[2]{
+    `*[_type == 'PopularProducts'][0]{
       'PopularProductsHeading': PopularProductsHeading,
       'cards': cards[] {
         'cardPopularProductsImg': cardPopularProductsImg.asset->url,
@@ -25,7 +25,7 @@ export default async function PopularProducts() {
         {res.cards.map((product: any, index: number) => (
           <div key={index} className="cursor-pointer">
             <div className="relative aspect-[4/3] mb-4 overflow-hidden">
-              <Link href="/productListing">
+              <Link href="/productCards">
                 <Image
                   src={product.cardPopularProductsImg}
                   alt={product.cardPopularProductsHeading || 'Product Image'}
