@@ -62,6 +62,30 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")]
+};
+
+module.exports = {
+
+  // other configurations
+
+  corePlugins: {
+
+	preflight: false,
+
+  },
+
+  plugins: [
+
+	require('@tailwindcss/forms'),
+
+	require('@tailwindcss/typography'),
+
+	require('@tailwindcss/aspect-ratio'),
+
+	require('@tailwindcss/line-clamp'),
+
+  ],
+
 };
 export default config;
