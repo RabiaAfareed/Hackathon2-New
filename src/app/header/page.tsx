@@ -1,3 +1,4 @@
+import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { CiSearch } from "react-icons/ci";
@@ -11,22 +12,30 @@ function Header() {
         {/* Top Content */}
         <div className="w-full flex justify-between items-center py-4">
           {/* Search Icon */}
-          <CiSearch size={24} className="text-gray-700 sm:text-[32px]" />
+          <CiSearch size={28} className="text-gray-700 sm:text-[32px]" />
+         
           {/* Logo */}
           <h1 className="text-[20px] sm:text-[25px] leading-[30px] font-[400] text-[#22202E]">
             Avicon
           </h1>
           {/* Icons */}
           <div className="flex gap-2">
+
+
             <Link href={"/shopingBasket"}>
               <CiShoppingCart
+              
                 size={24}
                 className="text-gray-700 sm:text-[32px]"
               />
             </Link>
             <Link href={"/about"}>
-              <IoIosContact size={24} className="text-gray-700 sm:text-[32px]" />
+              <IoIosContact size={28} className="text-gray-700 sm:text-[32px]" />
             </Link>
+            <div className="text-gray-700 sm:text-[32px]">
+              <UserButton />
+            </div>
+            
           </div>
         </div>
 

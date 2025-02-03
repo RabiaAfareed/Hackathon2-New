@@ -16,20 +16,19 @@ import Email from '@/app/email/page';
 import CeramicsCollection from '@/app/creamics/page';
 import Link from 'next/link';
 import PostCreator from '@/components/ui/review';
+import { SignIn } from '@clerk/nextjs';
+
+<SignIn/>
 
 export default async function ProductCardDetails({searchParams}: {searchParams: Promise<{
   image: string, colors:string[],name: string, _id: string, category: string,description:string, price: number
 
 }>})
 
+
+
 {
-
   const {image, name, _id, description,price} = await searchParams
-  console.log("🍊🍊", searchParams);
-  
-  
-
-
 
   return (
     <div className="w-full h-auto">

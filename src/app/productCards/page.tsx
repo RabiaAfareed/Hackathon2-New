@@ -7,54 +7,133 @@ import Image from 'next/image';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { Label } from '@/components/ui/label';
 import { client } from '@/sanity/lib/client';
+import { clerkGetUser } from '@/services/userApi';
 
-interface Product {
-  src: any;
-  price: number;
+import { useAtom } from "jotai";
+import { searchName } from "@/globalState/globalState";
+import { sanityFetch } from "@/services/sanityApi";
+
+// interface Product {
+//   src: any;
+//   price: number;
+//   image: string;
+//   tags: string;
+//   discountPercentage: number;
+//   description: string;
+//   name: string;
+//   _id: string;
+// }
+// export default function Productv1() {
+//   const [products, setProducts] = useState<Product[]>([]);
+//   // Function to fetch products from Sanity
+//   const fetchData = async () => {
+//     const query = `*[_type == "product"]{
+//       price,
+//       "image": image.asset->url,
+//       rating,
+//       ratingCount,
+//       "tags": tags[0],
+//       discountPercentage,
+//       description,
+//       name,
+//       _id
+//     }`;
+
+//     try {
+//       const data = await client.fetch(query);
+//       console.log('Fetched Data:', data);
+//       return data;
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//       return [];
+//     }
+//   };
+
+//   useEffect(() => {
+//     const fetchProducts = async () => {
+//       const data = await fetchData();
+//       setProducts(data);
+//     };
+
+//     fetchProducts();
+//   }, []);
+
+
+//     useEffect(() => {
+//       clerkGetUser()
+//     }, []);
+
+export interface Card {
   image: string;
-  tags: string;
-  discountPercentage: number;
-  description: string;
-  name: string;
+  colors: string;
+  productName: string;
   _id: string;
+  category: string;
+  status: string;
+  description: string;
+  inventory: number;
+  price: number;
 }
 
-export default function Productv1() {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  // Function to fetch products from Sanity
-  const fetchData = async () => {
-    const query = `*[_type == "product"]{
-      price,
-      "image": image.asset->url,
-      rating,
-      ratingCount,
-      "tags": tags[0],
-      discountPercentage,
-      description,
-      name,
-      _id
-    }`;
-
-    try {
-      const data = await client.fetch(query);
-      console.log('Fetched Data:', data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return [];
-    }
-  };
+export default function ProductsCards({
+  selectedCategory,
+  price,
+}: {
+  selectedCategory: string | null;
+  price: number;
+}) {
+  const [search] = useAtom(searchName);
+  const [data, setData] = useState<Card[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [error, setError] = useState<string | null>(null); // Add error state
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const data = await fetchData();
-      setProducts(data);
-    };
+    async function getData() {
+      try {
+        setIsLoading(true); // Set loading to true before fetching
+        setError(null); // Clear any previous errors
 
-    fetchProducts();
-  }, []);
+        let query = '*[_type == "product"]';
 
+        if (search) {
+          query = `*[_type == "product" && productName match "${search}*"]`;
+        } else if (price) {
+          query = `*[_type == 'product' && price < ${price}]`;
+        } else if (selectedCategory) {
+          query = `*[_type == 'product' && category == "${selectedCategory}"]`;
+        }
+
+        const res = await sanityFetch(query);
+
+        setData(res);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch products. Please try again later."); // Set error message
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching
+      }
+    }
+
+    getData();
+  }, [selectedCategory, price, search]);
+
+  // Display loading state
+  if (isLoading) {
+    return <div className="text-center py-8">Loading products...</div>;
+  }
+
+  // Display error state
+  if (error) {
+    return <div className="text-center py-8 text-red-500">{error}</div>;
+  }
+
+  // Display fallback UI when no products are available
+  if (data.length === 0) {
+    return <div className="text-center py-8">No products available.</div>;
+  }
+
+
+    
   return (
     <>
       {/* Navigation */}
@@ -178,24 +257,26 @@ export default function Productv1() {
 
         {/* Product Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 p-6">
-          {products.map(( Product,index) => (
-            <Link href={`/productCards/productDetail?name=${Product.name}&description=${Product.description}
-            &price=${Product.price}&image=${Product.image}`} key={index}>
+        {data.map((item: Card, index: number) => {
+          return(
+            <Link href={`/productCards/productDetail?name=${item.productName}&description=${item.description}
+            &price=${item.price}&image=${item.image}`} key={index}>
              
             
-              <div className="bg-white p-4 rounded-lg shadow transform transition-transform hover:scale-105" key={Product._id}>
+              <div className="bg-white p-4 rounded-lg shadow transform transition-transform hover:scale-105" key={index}>
                 <Image
-                  src={Product.image}
+                  src={item.image}
                   alt="card Image"
                   width={305}
                   height={375}
                   className="w-full h-[375px] object-cover rounded-md"
                 />
-                <h4 className="font-bold mt-4 mb-2">{Product.name}</h4>
-                <p className="text-gray-600">{Product.price}</p>
+                <h4 className="font-bold mt-4 mb-2">{item.productName}</h4>
+                <p className="text-gray-600">{item.price}</p>
               </div>
             </Link>
-          ))}
+          );
+          })}
         </div>
       </div>
     </>

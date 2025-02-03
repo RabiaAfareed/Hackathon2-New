@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link";
 import { Heart, Trash2 } from "lucide-react"
+import { clerkGetUser } from "@/services/userApi"
 
 interface CartItem {
   id: string;
@@ -48,6 +49,10 @@ export default function ShoppingCart() {
       router.replace("/cart")
     }  
   },[searchParam, router])
+
+  useEffect(()=>{
+    clerkGetUser()
+  },[cartItem])
 
   function handleRemoveItem(index: number){
     const removeCard = [...cartItem]

@@ -1,17 +1,17 @@
 import { type SchemaTypeDefinition } from 'sanity'
 import { product } from './product'
 import { Category } from './category'
-import landingPage from './landingPage-sections/landingPage'
-import hero from './landingPage-sections/hero'
-import Creamics from './landingPage-sections/Creamics'
 
+import hero from './landingPage-sections/hero'
 import PopularProducts from './landingPage-sections/PopularProducts'
+import { userSchema } from './user'
+import Creamics from './landingPage-sections/Creamics'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [product,
+  types: [userSchema,
+         product,
           Category,
-          landingPage,
           hero,
           Creamics,
           PopularProducts,
