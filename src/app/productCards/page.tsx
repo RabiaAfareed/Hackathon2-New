@@ -13,124 +13,126 @@ import { useAtom } from "jotai";
 import { searchName } from "@/globalState/globalState";
 import { sanityFetch } from "@/services/sanityApi";
 
-// interface Product {
-//   src: any;
-//   price: number;
-//   image: string;
-//   tags: string;
-//   discountPercentage: number;
-//   description: string;
-//   name: string;
-//   _id: string;
-// }
-// export default function Productv1() {
-//   const [products, setProducts] = useState<Product[]>([]);
-//   // Function to fetch products from Sanity
-//   const fetchData = async () => {
-//     const query = `*[_type == "product"]{
-//       price,
-//       "image": image.asset->url,
-//       rating,
-//       ratingCount,
-//       "tags": tags[0],
-//       discountPercentage,
-//       description,
-//       name,
-//       _id
-//     }`;
-
-//     try {
-//       const data = await client.fetch(query);
-//       console.log('Fetched Data:', data);
-//       return data;
-//     } catch (error) {
-//       console.error('Error fetching data:', error);
-//       return [];
-//     }
-//   };
-
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       const data = await fetchData();
-//       setProducts(data);
-//     };
-
-//     fetchProducts();
-//   }, []);
-
-
-//     useEffect(() => {
-//       clerkGetUser()
-//     }, []);
-
-export interface Card {
+interface Product {
+  src: any;
+  price: number;
   image: string;
-  colors: string;
-  productName: string;
-  _id: string;
-  category: string;
-  status: string;
+  tags: string;
+  discountPercentage: number;
   description: string;
-  inventory: number;
-  price: number;
+  name: string;
+  _id: string;
 }
+export default function Productv1() {
+  const [products, setProducts] = useState<Product[]>([]);
+  // Function to fetch products from Sanity
+  const fetchData = async () => {
+    const query = `*[_type == "product"]{
+      price,
+      "image": image.asset->url,
+      rating,
+      ratingCount,
+      "tags": tags[0],
+      discountPercentage,
+      description,
+      name,
+      _id
+    }`;
 
-export default function ProductsCards({
-  selectedCategory,
-  price,
-}: {
-  selectedCategory: string | null;
-  price: number;
-}) {
-  const [search] = useAtom(searchName);
-  const [data, setData] = useState<Card[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
-  const [error, setError] = useState<string | null>(null); // Add error state
+    try {
+      const data = await client.fetch(query);
+      console.log('Fetched Data:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return [];
+    }
+  };
 
   useEffect(() => {
-    async function getData() {
-      try {
-        setIsLoading(true); // Set loading to true before fetching
-        setError(null); // Clear any previous errors
+    const fetchProducts = async () => {
+      const data = await fetchData();
+      setProducts(data);
+    };
 
-        let query = '*[_type == "product"]';
+    fetchProducts();
+  }, []);
 
-        if (search) {
-          query = `*[_type == "product" && productName match "${search}*"]`;
-        } else if (price) {
-          query = `*[_type == 'product' && price < ${price}]`;
-        } else if (selectedCategory) {
-          query = `*[_type == 'product' && category == "${selectedCategory}"]`;
-        }
 
-        const res = await sanityFetch(query);
+    useEffect(() => {
+      clerkGetUser()
+    }, []);
 
-        setData(res);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch products. Please try again later."); // Set error message
-      } finally {
-        setIsLoading(false); // Set loading to false after fetching
-      }
-    }
+// export interface Card {
+//   image: string;
+//   colors: string;
+//   productName: string;
+//   _id: string;
+//   category: string;
+//   status: string;
+//   description: string;
+//   inventory: number;
+//   price: number;
+// }
 
-    getData();
-  }, [selectedCategory, price, search]);
+// export default function ProductsCards({
+//   selectedCategory,
+//   price,
+// }: {
+//   selectedCategory: string | null;
+//   price: number;
+// }) {
+//   const [search] = useAtom(searchName);
+//   const [data, setData] = useState<Card[]>([]);
+//   const [isLoading, setIsLoading] = useState(true); // Add loading state
+//   const [error, setError] = useState<string | null>(null); // Add error state
+ 
+  
 
-  // Display loading state
-  if (isLoading) {
-    return <div className="text-center py-8">Loading products...</div>;
-  }
+//   useEffect(() => {
+//     async function getData() {
+//       try {
+//         setIsLoading(true); // Set loading to true before fetching
+//         setError(null); // Clear any previous errors
 
-  // Display error state
-  if (error) {
-    return <div className="text-center py-8 text-red-500">{error}</div>;
-  }
+//         let query = '*[_type == "product"]';
 
-  // Display fallback UI when no products are available
-  if (data.length === 0) {
-    return <div className="text-center py-8">No products available.</div>;
-  }
+//         if (search) {
+//           query = `*[_type == "product" && productName match "${search}*"]`;
+//         } else if (price) {
+//           query = `*[_type == 'product' && price < ${price}]`;
+//         } else if (selectedCategory) {
+//           query = `*[_type == 'product' && category == "${selectedCategory}"]`;
+//         }
+
+//         const res = await sanityFetch(query);
+
+//         setData(res);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//         setError("Failed to fetch products. Please try again later."); // Set error message
+//       } finally {
+//         setIsLoading(false); // Set loading to false after fetching
+//       }
+//     }
+
+//     getData();
+//   }, [selectedCategory, price, search]);
+
+//   // Display loading state
+//   if (isLoading) {
+//     return <div className="text-center py-8">Loading products...</div>;
+//   }
+
+//   // Display error state
+//   if (error) {
+//     return <div className="text-center py-8 text-red-500">{error}</div>;
+//   }
+
+//   // Display fallback UI when no products are available
+//   if (data.length === 0) {
+//     return <div className="text-center py-8">No products available.</div>;
+//   }
 
 
     
@@ -182,7 +184,11 @@ export default function ProductsCards({
 
       {/* Main Image */}
       <div className="flex justify-center mt-8">
-        <Image src="/productimg.png" width={1440} height={209} alt="Main Product" />
+        <Image src="/productimg.png"
+         alt="Main Product"
+         width={1440}
+         height={209}
+           />
       </div>
 
       {/* Main Content Section */}
@@ -257,9 +263,9 @@ export default function ProductsCards({
 
         {/* Product Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 p-6">
-        {data.map((item: Card, index: number) => {
+        {products.map((item: Product, index: number) => {
           return(
-            <Link href={`/productCards/productDetail?name=${item.productName}&description=${item.description}
+            <Link href={`/productCards/productDetail?name=${item.name}&description=${item.description}
             &price=${item.price}&image=${item.image}`} key={index}>
              
             
@@ -271,8 +277,8 @@ export default function ProductsCards({
                   height={375}
                   className="w-full h-[375px] object-cover rounded-md"
                 />
-                <h4 className="font-bold mt-4 mb-2">{item.productName}</h4>
-                <p className="text-gray-600">{item.price}</p>
+                <h4 className="font-bold mt-4 mb-2">{item.name}</h4>
+                <p className="text-gray-600">₹{item.price}.00</p>
               </div>
             </Link>
           );

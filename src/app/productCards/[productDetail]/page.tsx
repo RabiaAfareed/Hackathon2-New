@@ -21,14 +21,14 @@ import { SignIn } from '@clerk/nextjs';
 <SignIn/>
 
 export default async function ProductCardDetails({searchParams}: {searchParams: Promise<{
-  image: string, colors:string[],name: string, _id: string, category: string,description:string, price: number
+  image: string, colors: string[],name: string, _id: string, category: string,description: string,inventory: number, price: number
 
 }>})
 
-
-
 {
-  const {image, name, _id, description,price} = await searchParams
+
+  const {image, colors, name, _id, description,inventory, price} = await searchParams
+
 
   return (
     <div className="w-full h-auto">
@@ -67,7 +67,7 @@ export default async function ProductCardDetails({searchParams}: {searchParams: 
         <div className="lg:ml-8">
           <div className="w-full lg:w-[602px] mt-4 lg:mt-[91px]">
             <div className="w-full lg:w-[602px] p-4">
-              <h1 className="text-[24px] leading-[30px] font-[400] text-[#22202E] text-start mb-8">   {name}</h1>
+              <h1 className="text-[24px] leading-[30px] font-[400] text-[#22202E] text-start mb-8">{name}</h1>
               <p className="text-[24px] leading-[32px] text-[#22202E] text-start">₹ {price.toLocaleString()}.00</p>
               <div className="w-full mt-[14px] pt-[40px] text-start text-[#505977]">
                 <h3>Description</h3>
@@ -86,8 +86,8 @@ export default async function ProductCardDetails({searchParams}: {searchParams: 
                     <h4 className="mr-4">Amount</h4>
                     <button className="w-[112px] h-[46px] bg-[#F9F9F9] text-black">1</button>
                   </div>
-                  <Link href={`/cart?name=${name}&price=${price}&description=${description}
-                  &image=${image}&id=${_id}`}>
+                  <Link href={`/cart?name=${name}&price=${price}
+                  &description=${description}&image=${image}&id=${_id}&inventory=${inventory}`}>
                  
                   <button
                     className="w-[112px] h-[46px] bg-[#2A254B] hover:bg-slate-500 text-white" >

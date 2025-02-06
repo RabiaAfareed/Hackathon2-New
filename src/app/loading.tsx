@@ -7,7 +7,7 @@ export default function Loading() {
                 
           {/* Text animation with slide effect */}
           <h2 className="text-5xl font-extrabold text-white animate-slide-in">
-            JUST DO IT
+            JUST A MOMENT😊
           </h2>
   
           {/* Progressive loading dots with Nike color scheme */}
